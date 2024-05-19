@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Form</title>
+</head>
+<body>
+    <h2>Simple Form</h2>
+    <form id="myForm">
+        <label for="name">Phone:</label>
+        <input type="phone" id="phone" name="phone"><br><br>
+        <label for="email">Message:</label>
+        <input type="text" id="msg" name="msg"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+        
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get form data
+        const formData = new FormData(this);
+
+        // Convert form data to URL-encoded format
+        const encodedFormData = new URLSearchParams(formData).toString();
+
+        // Send form data to the server asynchronously using fetch API
+        fetch('/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded' // Set content type to URL-encoded
+            },
+            body: encodedFormData
+        })
+        .then(response => response.text())
+        .then(message => {
+            // Display submission message
+            document.getElementById('message').textContent = message;
+            // Clear form fields
+            document.getElementById('phone').value = '';
+            document.getElementById('msg').value = '';
+        })
+        .catch(error => console.error('Error submitting form:', error));
+    });
+</script>
+
+    </script>
+</body>
+</html>
